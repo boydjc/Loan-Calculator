@@ -32,8 +32,17 @@ class ViewController: UIViewController {
         
     @IBAction func onButtonPress(_ sender: UIButton) {
         
-        if(Float(loanAmountOutlet.text!) == nil || Int(numOfPmtsOutlet.text!) == nil || Float(interestRateOutlet.text!) == nil) {
-            showErrMsg()
+        var calcFlag: Bool = true
+        
+        if(Float(loanAmountOutlet.text!) == nil || Float(loanAmountOutlet.text!)! < 0) {
+            showErrMsg(outletField: "Loan Amt")
+            calcFlag = false
+        }else if(Int(numOfPmtsOutlet.text!) == nil || Int(numOfPmtsOutlet.text!)! < 0) {
+            showErrMsg(outletField: "Num Pmts")
+            calcFlag = false
+        }else if(Float(interestRateOutlet.text!) == nil || Float(interestRateOutlet.text!)! < 0) {
+            showErrMsg(outletField: "Int. rate")
+            calcFlag = false
         }
         
         let loanAmount = loanAmountOutlet.text! == "" ?  0.00 : Float(loanAmountOutlet.text!) ?? 0.00
@@ -42,11 +51,14 @@ class ViewController: UIViewController {
         
         let interestRate = interestRateOutlet.text! == "" ?  0.00 : Float(interestRateOutlet.text!) ?? 0.00
                      
-        calcPayment(loanAmountIn: loanAmount, numOfPmtsIn: numOfPmts, interestRateIn: interestRate)
+        if(calcFlag) {
+            calcPayment(loanAmountIn: loanAmount, numOfPmtsIn: numOfPmts, interestRateIn: interestRate)
+        }
     }
     
-    func showErrMsg() {
-        let errController = UIAlertController(title: "ERROR!", message: "You have invalid input.", preferredStyle: .alert)
+    func showErrMsg(outletField: String) {
+        let msg = "You have invalid input in the " + outletField + " field."
+        let errController = UIAlertController(title: "ERROR!", message: msg, preferredStyle: .alert)
         
         let confirmAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
         
