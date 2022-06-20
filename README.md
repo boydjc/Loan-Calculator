@@ -1,6 +1,6 @@
 # Loan-Calculator
 
-A simple loan calculator for a class assignment. Practices layout constraints. The app will size correctly for the following iPhone displays in both portrait and landscape.
+A simple loan calculator for iOS. Practices layout constraints. The app will size correctly for the following iPhone displays in both portrait and landscape.
 
  - iPhone 13 Pro Max
  - iPhone 11 Pro Max
