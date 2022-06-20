@@ -31,13 +31,33 @@ class ViewController: UIViewController {
     }
         
     @IBAction func onButtonPress(_ sender: UIButton) {
-            
+        
+        if(Float(loanAmountOutlet.text!) == nil || Int(numOfPmtsOutlet.text!) == nil || Float(interestRateOutlet.text!) == nil) {
+            showErrMsg()
+        }
+        
         let loanAmount = loanAmountOutlet.text! == "" ?  0.00 : Float(loanAmountOutlet.text!) ?? 0.00
-            
-        let numOfPmts = numOfPmtsOutlet.text! == "" ? 0 : Int(numOfPmtsOutlet.text!) ?? 0
-            
-        var interestRate = interestRateOutlet.text! == "" ? 0.00 : Float(interestRateOutlet.text!) ?? 0.00
-            
+        
+        let numOfPmts = numOfPmtsOutlet.text! == "" ?  0 : Int(numOfPmtsOutlet.text!) ?? 0
+        
+        let interestRate = interestRateOutlet.text! == "" ?  0.00 : Float(interestRateOutlet.text!) ?? 0.00
+                     
+        calcPayment(loanAmountIn: loanAmount, numOfPmtsIn: numOfPmts, interestRateIn: interestRate)
+    }
+    
+    func showErrMsg() {
+        let errController = UIAlertController(title: "ERROR!", message: "You have invalid input.", preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        
+        errController.addAction(confirmAction)
+        
+        self.present(errController, animated: true, completion: nil)
+    }
+    
+    func calcPayment(loanAmountIn: Float, numOfPmtsIn: Int, interestRateIn: Float) {
+        
+        var interestRate = interestRateIn;
         interestRate /= 100.0
             
         if(!pmtPeriodToggle.isOn) {
@@ -45,7 +65,7 @@ class ViewController: UIViewController {
         }
             
         let fracPrePow = 1 + interestRate
-        let fracPow = pow(fracPrePow, Float(numOfPmts))
+        let fracPow = pow(fracPrePow, Float(numOfPmtsIn))
 
         let formulaTop = interestRate * fracPow
                 
@@ -53,7 +73,7 @@ class ViewController: UIViewController {
                 
         let formulaFrac = formulaTop / formulaBottom
             
-        let pmtAmount: Float = Float(loanAmount) * formulaFrac
+        let pmtAmount: Float = Float(loanAmountIn) * formulaFrac
             
         pmtAmountOutlet.text = "$" + String(round(pmtAmount * 100) / 100.0)
     }
